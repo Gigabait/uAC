@@ -2,6 +2,8 @@ local table = table.Copy(table)
 local net = table.Copy(net)
 local timer = table.Copy(timer)
 local debug = table.Copy(debug)
+local hook = table.Copy(hook)
+local concommand = table.Copy(concommand)
 
 local function Punish(reason)
 	net.Start("uAC_Ban")
@@ -21,7 +23,13 @@ local function RandomString()
 	return randstr
 end
 
-local function CheckHooks()
+local BadContain = {
+	"lenny",
+	"ahack",
+	"mapex",
+}
+
+local function CheckMain()
 	if GAMEMODE.Think then
 		if string.Explode("/", debug.getinfo(GAMEMODE.Think).source)[1] != "@gamemodes" then
 			Punish("GAMEMODE Hook Overriding")
@@ -39,9 +47,27 @@ local function CheckHooks()
 			Punish("GAMEMODE Hook Overriding")
 		end
 	end
+	
+	for tbl,nope in pairs(hook.GetTable()) do
+		for hk,nope2 in pairs(hook.GetTable()[tbl]) do
+			for nope3,bad in pairs(BadContain) do
+				if string.find(string.lower(hk), bad) then
+					Punish("Bad Hook")
+				end
+			end
+		end
+	end
+	
+	for cmd,nope in pairs(concommand.GetTable()) do
+		for nope2,bad in pairs(BadContain) do
+			if string.find(string.lower(cmd), bad) then
+				Punish("Bad Command")
+			end
+		end
+	end
 end
 
-timer.Create(RandomString(), 5, 0, CheckHooks)
+timer.Create(RandomString(), 5, 0, CheckMain)
 
 local GoodModules = {
 	"ai_schedule",
