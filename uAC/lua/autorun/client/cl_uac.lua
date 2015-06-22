@@ -58,7 +58,7 @@ local function CheckMain()
 	for tbl,nope in pairs(hook.GetTable()) do
 		for hk,nope2 in pairs(hook.GetTable()[tbl]) do
 			for nope3,bad in pairs(BadContain) do
-				if string.find(string.lower(hk), bad) then
+				if string.find(string.lower(tostring(hk)), bad) then
 					Punish("Bad Hook")
 				end
 			end
@@ -67,7 +67,7 @@ local function CheckMain()
 	
 	for cmd,nope in pairs(concommand.GetTable()) do
 		for nope2,bad in pairs(BadContain) do
-			if string.find(string.lower(cmd), bad) then
+			if string.find(string.lower(tostring(cmd)), bad) then
 				Punish("Bad Command")
 			end
 		end
