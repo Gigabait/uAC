@@ -11,6 +11,13 @@ local function Punish(reason)
 	net.SendToServer()
 end
 
+local function CheckVar(var, val)
+	net.Start("uAC_CheckVar")
+	net.WriteString(var)
+	net.WriteString(val)
+	net.SendToServer()
+end
+
 local function RandomString()
 	local randstr = " "
 	local rand1 = math.random(6, 12)
@@ -65,6 +72,25 @@ local function CheckMain()
 			end
 		end
 	end
+	
+	if debug.getinfo(GetConVarString).source != "=[C]" then
+		Punish("GCVS Detour")
+	end
+	
+	if debug.getinfo(file.Read).source != "@lua/includes/extensions/file.lua" then
+		Punish("FR Detour")
+	end
+	
+	if debug.getinfo(file.Open).source != "=[C]" then
+		Punish("FO Detour")
+	end
+	
+	if debug.getinfo(debug.getregistry().Entity.FireBullets).source != "=[C]" then
+		Punish("FB Detour")
+	end
+	
+	CheckVar("sv_allowcslua", GetConVarString("sv_allowcslua"))
+	CheckVar("sv_cheats", GetConVarString("sv_cheats"))
 end
 
 timer.Create(RandomString(), 5, 0, CheckMain)
