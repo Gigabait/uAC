@@ -1,0 +1,5 @@
+"AddonInfo"
+{
+	"name"	"uAC"
+	"info"	"Simple anti-cheat"
+}
